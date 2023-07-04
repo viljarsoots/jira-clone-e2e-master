@@ -1,8 +1,7 @@
 
 
 import { faker } from "@faker-js/faker";
-const randomTitle = faker.word.noun();
-const randomDescription = faker.word.words(5);
+
 
 
 describe("Issue create", () => {
@@ -73,7 +72,7 @@ describe("Issue create", () => {
     cy.get('[data-testid="modal:issue-create"]').within(() => {
 
       cy.get('[data-testid="select:type"]').click();
-      cy.get('[data-testid="icon:bug"]').trigger("click");
+      cy.get('[data-testid="select-option:Bug"]').trigger("click");
       cy.get(".ql-editor").type("My bug description");
       cy.get('input[name="title"]').type("Bug");
       cy.get('[data-testid="form-field:reporterId"]').click();
@@ -105,12 +104,14 @@ describe("Issue create", () => {
       });
   });
 
-  it("Assignment 2 Test 2 create an issue with random data plugin and validate it successfully", () => {
+  it.only("Assignment 2 Test 2 create an issue with random data plugin and validate it successfully", () => {
+    const randomTitle = faker.word.noun();
+    const randomDescription = faker.word.words(5);
 
     cy.get('[data-testid="modal:issue-create"]').within(() => {
 
       cy.get('[data-testid="select:type"]').click();
-      cy.get('[data-testid="icon:close"]').click();
+      cy.get('[data-testid="icon:close"]').trigger('mousover').trigger('click');
       cy.get('[data-testid="select-option:Task"]').trigger("click");
       cy.get(".ql-editor").type(randomDescription);
       cy.get('input[name="title"]').type(randomTitle);
