@@ -1,78 +1,73 @@
 
-import { faker } from "@faker-js/faker";
-
 describe('Issue deleting', () => {
   beforeEach(() => {
-    cy.visit("/");
-    cy.url()
-      .should("eq", "https://jira.ivorreic.com/project")
-      .then((url) => {
-        //System will already open issue creating modal in beforeEach block
-        cy.visit(url + "/board?modal-issue-create=true");
-      });
+    cy.visit('/');
+    cy.url().should('eq', `${Cypress.env('baseUrl')}project`).then((url) => {
+      cy.visit(url + '/board');
+      cy.get('[data-testid="list-issue"]')
+        .should("be.visible")
+        .first()
+        //Saving the issue name for assertation at the end of the tests
+        .then(($span) => {
+          taskName = $span.text();
+        })
+        .click();
+      getIssueDetailsModal()
+        .should("be.visible")
+    });
 
   });
 
-
-  it.only('Will create a new issue and delete it', () => {
-    getAddNewIssueModal().within(() => {
-      let title = 'NewBug'
-      fillFields(title);
-      cy.get('button[type="submit"]').click();
-    });
-    cy.get('[data-testid="modal:issue-create"]').should("not.exist");
-    cy.contains("Issue has been successfully created.").should("be.visible");
-    cy.reload();
-    cy.get('[data-testid="list-issue"]')
-      .first()
-      .click();
-
-    cy.get('[data-testid="icon:trash"]')
+  it('Should delete first issue from the list', () => {
+    getIssueDetailsModal()
+      .find('[data-testid="icon:trash"]')
       .click();
 
     cy.get('[data-testid="modal:confirm"]')
       .contains('button', 'Delete issue')
+      .click()
+      .should("not.exist");
+
+    cy.reload();
+    cy.get('[data-testid="board-list:backlog')
+      .should("be.visible")
+      .and("have.length", "1")
+      .within(() => {
+        //Assert that First Issue from the list is deleted.
+        cy.get('[data-testid="list-issue"]')
+          .first('not.contain', taskName);
+
+      });
+
+  });
+
+  it('Should cancel the delete first issue from the list process', () => {
+    getIssueDetailsModal()
+      .find('[data-testid="icon:trash"]')
       .click();
-    
+
+    cy.get('[data-testid="modal:confirm"]')
+      .contains('button', 'Cancel')
+      .click()
+      .should("not.exist");
+
+    cy.get('[data-testid="icon:close"]')
+      .first()
+      .click()
+
+    cy.reload();
+    cy.get('[data-testid="board-list:backlog')
+      .should("be.visible")
+      .and("have.length", "1")
+      .within(() => {
+        //Assert that First Issue from the list is not deleted.
+        cy.get('[data-testid="list-issue"]')
+          .first('contain', taskName);
+
+      });
 
   });
-
-  it('Should update title, description successfully', () => {
-    const title = 'TEST_TITLE';
-    const description = 'TEST_DESCRIPTION';
-
-    getIssueDetailsModal().within(() => {
-      cy.get('textarea[placeholder="Short summary"]')
-        .clear()
-        .type(title)
-        .blur();
-
-      cy.get('.ql-snow')
-        .click()
-        .should('not.exist');
-
-      cy.get('.ql-editor').clear().type(description);
-
-      cy.contains('button', 'Save')
-        .click()
-        .should('not.exist');
-
-      cy.get('textarea[placeholder="Short summary"]').should('have.text', title);
-      cy.get('.ql-snow').should('have.text', description);
-    });
-  });
-  const getAddNewIssueModal = () => cy.get('[data-testid="modal:issue-create"]');
+  let taskName
   const getIssueDetailsModal = () => cy.get('[data-testid="modal:issue-details"]');
+
 });
-function fillFields(title) {
-  cy.get('[data-testid="select:type"]').click();
-  cy.get('[data-testid="select-option:Bug"]').trigger("click");
-  cy.get(".ql-editor").type("My bug description");
-  cy.get('input[name="title"]').type(title);
-  cy.get('[data-testid="form-field:reporterId"]').click();
-  cy.get('[data-testid="select-option:Pickle Rick"]').click();
-  cy.get('[data-testid="select:userIds"]').click();
-  cy.get('[data-testid="select-option:Lord Gaben"]').click();
-  cy.get('[data-testid="form-field:priority"]').click();
-  cy.get('[data-testid="select-option:Highest"]').click();
-}
