@@ -18,6 +18,9 @@ describe('Issue deleting', () => {
 
   });
 
+  let taskName
+  const getIssueDetailsModal = () => cy.get('[data-testid="modal:issue-details"]');
+
   it('Should delete first issue from the list', () => {
     getIssueDetailsModal()
       .find('[data-testid="icon:trash"]')
@@ -41,7 +44,7 @@ describe('Issue deleting', () => {
 
   });
 
-  it('Should cancel the delete first issue from the list process', () => {
+  it('Should cancel the deletion process of first issue successfully', () => {
     getIssueDetailsModal()
       .find('[data-testid="icon:trash"]')
       .click();
@@ -67,7 +70,5 @@ describe('Issue deleting', () => {
       });
 
   });
-  let taskName
-  const getIssueDetailsModal = () => cy.get('[data-testid="modal:issue-details"]');
-
+  
 });
