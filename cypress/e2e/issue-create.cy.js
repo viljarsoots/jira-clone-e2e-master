@@ -111,7 +111,7 @@ describe("Issue create", () => {
     cy.get('[data-testid="modal:issue-create"]').within(() => {
 
       cy.get('[data-testid="select:type"]').click();
-      cy.get('[data-testid="icon:close"]').trigger('mousover').trigger('click');
+      cy.get('[data-testid="icon:close"]').trigger('mouseover').trigger('click');
       cy.get('[data-testid="select-option:Task"]').trigger("click");
       cy.get(".ql-editor").type(randomDescription);
       cy.get('input[name="title"]').type(randomTitle);
