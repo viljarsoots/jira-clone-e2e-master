@@ -12,6 +12,7 @@ describe('Issue deleting', () => {
           taskName = $span.text();
         })
         .click();
+        
       getIssueDetailsModal()
         .should("be.visible")
     });
@@ -22,6 +23,7 @@ describe('Issue deleting', () => {
   const getIssueDetailsModal = () => cy.get('[data-testid="modal:issue-details"]');
 
   it('Should delete first issue from the list', () => {
+    cy.log(taskName);
     getIssueDetailsModal()
       .find('[data-testid="icon:trash"]')
       .click();

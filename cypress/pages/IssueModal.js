@@ -20,6 +20,7 @@ class IssueModal {
         this.doneButtonName = "Done";
         this.plusButton = '[data-testid="icon:plus"]';
         this.timeSpentField = '[placeholder="Number"]';
+        this.loggedTime = "logged";
     }
 
     getIssueModal() {
@@ -119,23 +120,24 @@ class IssueModal {
     }
 
     logTime(timeSpent) {
-        let currentTimeSpent
         cy.get(this.timeSpentField)
             .eq(1)
-            .invoke('val')
-            .then(number => {
-                currentTimeSpent = number;
-                cy.log(`Current number: "${currentTimeSpent}"`);
-                timeSpent =timeSpent + parseInt(currentTimeSpent);
-                cy.get(this.timeSpentField)
-                    .eq(1)
-                    .clear()
-                    .type(timeSpent);
-                cy.get(this.timeTrackingModal).within(() => {
-                    cy.contains(this.doneButtonName).click();
-                })
-            });
-            return timeSpent;
+            .clear()
+            .type(timeSpent);
+        cy.get(this.timeTrackingModal).within(() => {
+            cy.contains(this.doneButtonName).click();
+        })
+    }
+    ensureTimeIsLogged(timeSpent){
+        let loggedTime
+        cy.get(this.issueDetailModal).within(() => {
+            cy.contains(this.loggedTime)
+            //.should(be.visible)
+            .then(($span) => {
+                loggedTime = $span.text();
+            })
+            cy.log(`Checking time: "${loggedTime}"`);
+        });
     }
 
 }
