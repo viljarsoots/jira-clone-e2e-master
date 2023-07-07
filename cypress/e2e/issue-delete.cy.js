@@ -32,7 +32,7 @@ describe('Issue deleting', () => {
       .should("not.exist");
 
     cy.reload();
-    cy.get('[data-testid="board-list:backlog')
+    cy.get('[data-testid="board-list:backlog"]')
       .should("be.visible")
       .and("have.length", "1")
       .within(() => {
@@ -59,7 +59,7 @@ describe('Issue deleting', () => {
       .click()
 
     cy.reload();
-    cy.get('[data-testid="board-list:backlog')
+    cy.get('[data-testid="board-list:backlog"]')
       .should("be.visible")
       .and("have.length", "1")
       .within(() => {
