@@ -15,7 +15,7 @@ describe('Log time', () => {
   it.only('Should log time successfully', () => {
     IssueModal.clickTimeTracking();
     IssueModal.logTime(timeSpent);
-    IssueModal.ensureTimeIsLogged();
+    IssueModal.ensureTimeIsLogged(timeSpent);
     
     
   });

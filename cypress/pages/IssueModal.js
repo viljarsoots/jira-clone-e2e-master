@@ -129,14 +129,11 @@ class IssueModal {
         })
     }
     ensureTimeIsLogged(timeSpent){
-        let loggedTime
+        
         cy.get(this.issueDetailModal).within(() => {
-            cy.contains(this.loggedTime)
-            //.should(be.visible)
-            .then(($span) => {
-                loggedTime = $span.text();
-            })
-            cy.log(`Checking time: "${loggedTime}"`);
+            cy.contains(timeSpent+"h logged")
+            .should("be.visible");
+            
         });
     }
 
