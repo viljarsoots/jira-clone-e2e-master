@@ -1,8 +1,5 @@
 
-
 import { faker } from "@faker-js/faker";
-
-
 
 describe("Issue create", () => {
   beforeEach(() => {
@@ -14,9 +11,7 @@ describe("Issue create", () => {
         cy.visit(url + "/board?modal-issue-create=true");
       });
 
-
   });
-
 
   it("Should create an issue and validate it successfully", () => {
     //System finds modal for creating issue and does next steps inside of it
@@ -73,7 +68,7 @@ describe("Issue create", () => {
 
       cy.get('[data-testid="select:type"]').click();
       cy.get('[data-testid="select-option:Bug"]').trigger("click");
-      cy.get(".ql-editor").type("My bug description");
+      cy.get('[data-testid="form-field:description"]').type("My bug description");
       cy.get('input[name="title"]').type("Bug");
       cy.get('[data-testid="form-field:reporterId"]').click();
       cy.get('[data-testid="select-option:Pickle Rick"]').click();
@@ -82,34 +77,29 @@ describe("Issue create", () => {
       cy.get('button[type="submit"]').click();
     });
 
-    //Assert that modal window is closed and successful message is visible
     cy.get('[data-testid="modal:issue-create"]').should("not.exist");
     cy.contains("Issue has been successfully created.").should("be.visible");
-    //Assert that successful message has dissappeared after the reload
     cy.reload();
     cy.contains("Issue has been successfully created.").should("not.exist");
-    //Assert than only one list with name Backlog is visible and do steps inside of it
     cy.get('[data-testid="board-list:backlog')
       .should("be.visible")
       .and("have.length", "1")
       .within(() => {
-        //Assert that this list contains 5 issues and first element with tag p has specified text
         cy.get('[data-testid="list-issue"]')
           .should("have.length", "5")
           .first()
           .find("p")
           .contains("Bug");
-        //Assert that correct type icon is visible
         cy.get('[data-testid="icon:arrow-up"]').should("be.visible");
       });
   });
 
-  it.only("Assignment 2 Test 2 create an issue with random data plugin and validate it successfully", () => {
+  it("Assignment 2 Test 2 create an issue with random data plugin and validate it successfully", () => {
+
     const randomTitle = faker.word.noun();
     const randomDescription = faker.word.words(5);
 
     cy.get('[data-testid="modal:issue-create"]').within(() => {
-
       cy.get('[data-testid="select:type"]').click();
       cy.get('[data-testid="icon:close"]').trigger('mouseover').trigger('click');
       cy.get('[data-testid="select-option:Task"]').trigger("click");
@@ -122,24 +112,19 @@ describe("Issue create", () => {
       cy.get('button[type="submit"]').click();
     });
 
-    //Assert that modal window is closed and successful message is visible
     cy.get('[data-testid="modal:issue-create"]').should("not.exist");
     cy.contains("Issue has been successfully created.").should("be.visible");
-    //Assert that successful message has dissappeared after the reload
     cy.reload();
     cy.contains("Issue has been successfully created.").should("not.exist");
-    //Assert than only one list with name Backlog is visible and do steps inside of it
     cy.get('[data-testid="board-list:backlog')
       .should("be.visible")
       .and("have.length", "1")
       .within(() => {
-        //Assert that this list contains 5 issues and first element with tag p has specified text
         cy.get('[data-testid="list-issue"]')
           .should("have.length", "5")
           .first()
           .find("p")
           .contains(randomTitle);
-        //Assert that correct type icon is visible
         cy.get('[data-testid="icon:arrow-down"]').should("be.visible");
       });
   });

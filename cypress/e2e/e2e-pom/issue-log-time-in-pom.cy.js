@@ -1,7 +1,7 @@
 
 import IssueModal from "../../pages/IssueModal";
 
-describe('Issue delete', () => {
+describe('Log time', () => {
   beforeEach(() => {
     cy.visit('/');
     cy.url().should('eq', 'https://jira.ivorreic.com/project').then((url) => {  
@@ -10,11 +10,14 @@ describe('Issue delete', () => {
   });
 
   const issueTitle = 'This is an issue of type: Task.';
+  let timeSpent = 6;
 
-  it('Should delete issue successfully', () => {
-    IssueModal.clickDeleteButton();
-    IssueModal.confirmDeletion();
-    IssueModal.ensureIssueIsNotVisibleOnBoard(issueTitle);
+  it.only('Should log time successfully', () => {
+    IssueModal.clickTimeTracking();
+    IssueModal.logTime(timeSpent);
+    IssueModal.ensureTimeIsLogged(timeSpent);
+    
+    
   });
 
   it('Should cancel deletion process successfully', () => {
