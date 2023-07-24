@@ -11,16 +11,20 @@ class IssueModal {
         this.backlogList = '[data-testid="board-list:backlog"]';
         this.issuesList = '[data-testid="list-issue"]';
         this.deleteButton = '[data-testid="icon:trash"]';
-        this.deleteButtonName = "Delete issue";
+        this.deleteButtonName = 'Delete issue';
         this.cancelDeletionButtonName = "Cancel";
         this.confirmationPopup = '[data-testid="modal:confirm"]';
         this.closeButton = '[data-testid="icon:close"]';
         this.openTimeTracing = '[data-testid="icon:stopwatch"]'
         this.timeTrackingModal = '[data-testid="modal:tracking"]';
-        this.doneButtonName = "Done";
+        this.doneButtonName = 'Done';
         this.plusButton = '[data-testid="icon:plus"]';
         this.timeSpentField = '[placeholder="Number"]';
-        this.loggedTime = "logged";
+        this.loggedTime = 'logged';
+        this.commentTextArea = 'textarea[placeholder="Add a comment..."]';
+        this.issueComment = '[data-testid="issue-comment"]';
+        this.editButton = 'Edit';
+        this.saveButton = 'Save';
     }
 
     getIssueModal() {
@@ -135,6 +139,23 @@ class IssueModal {
             .should("be.visible");
             
         });
+    }
+    validateIssueVisibilityState(issueTitle, isVisible){
+        cy.get(this.issueDetailModal).should('not.exist');
+        cy.reload();
+        if (isVisible) cy.contains(issueTitle).should('be.visible');
+        if (!isVisible) cy.contains(issueTitle).should('not.exist');
+    }
+
+    addComment(newComment){
+        this.getIssueDetailModal().within(() => {
+            cy.contains('Add a comment...').debounced('type','m');
+            cy.get(this.commentTextArea)
+            .clear()
+            .type(newComment);
+            cy.contains(this.saveButton).click();
+        });
+        
     }
 
 }
