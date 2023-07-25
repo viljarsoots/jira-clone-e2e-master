@@ -70,6 +70,8 @@ describe("Issue comments creating, editing and deleting", () => {
   });
   it.only("Should Add Edit And Delete Comment on first Issue Successfully ", () => {
     const newComment = 'This is a new Comment'
+    cy.log('Adding comment');
     IssueModal.addComment(newComment);
+    IssueModal.validateCommentState(newComment, true);
   });
 });
