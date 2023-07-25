@@ -25,6 +25,8 @@ class IssueModal {
     this.issueComment = '[data-testid="issue-comment"]';
     this.editButton = "Edit";
     this.saveButton = "Save";
+    this.deleteCommentButton = "Delete";
+    this.confirmCommentDeletionButton = "Delete comment";
   }
 
   getIssueModal() {
@@ -150,13 +152,45 @@ class IssueModal {
     this.getIssueDetailModal().within(() => {
       cy.contains("Add a comment...").debounced("type", "m");
       cy.get(this.commentTextArea).clear().type(newComment);
+      cy.contains(this.saveButton).click().should("not.exist");
+    });
+  }
+  validateCommentState(commentText, isVisible) {
+    cy.get(this.issueDetailModal).should("exist");
+    if (isVisible) cy.contains(commentText).should("be.visible");
+    if (!isVisible) cy.contains(commentText).should("not.exist");
+  }
+  editComment(oldComment, newComment) {
+    this.getIssueDetailModal().within(() => {
+      cy.get(this.issueComment)
+        .first()
+        .contains(this.editButton)
+        .click()
+        .should("not.exist");
+      cy.get(this.commentTextArea)
+        .should("contain", oldComment)
+        .clear()
+        .type(newComment);
       cy.contains(this.saveButton).click();
     });
   }
-  validateCommentState(commentText, isVisible){
-    cy.get(this.issueDetailModal).should("exist");
-    if(isVisible) cy.contains(commentText).should('be.visible');
-    if(!isVisible) cy.contains(commentText).should('not.exist')
+
+  confirmCommentDeletion() {
+    cy.get(this.confirmationPopup).within(() => {
+      cy.contains(this.confirmCommentDeletionButton).click();
+    });
+    cy.get(this.confirmationPopup).should("not.exist");
+  }
+
+  deleteComment(comment) {
+    this.getIssueDetailModal().within(() => {
+      cy.get(this.issueComment)
+        .first()
+        .should("contain", comment)
+        .contains(this.deleteCommentButton)
+        .click();
+    });
+    cy.get(this.confirmationPopup).should("exist");
   }
 }
 

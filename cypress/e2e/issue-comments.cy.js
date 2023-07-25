@@ -69,9 +69,21 @@ describe("Issue comments creating, editing and deleting", () => {
       .should("not.exist");
   });
   it.only("Should Add Edit And Delete Comment on first Issue Successfully ", () => {
-    const newComment = 'This is a new Comment'
+    const comment = 'This is a first comment'
+    const editedComment = 'This is a edited Comment'
+
     cy.log('Adding comment');
-    IssueModal.addComment(newComment);
-    IssueModal.validateCommentState(newComment, true);
+    IssueModal.addComment(comment);
+    IssueModal.validateCommentState(comment, true);
+    
+    cy.log('Editing the comment what was just created');
+    IssueModal.editComment(comment, editedComment);
+    IssueModal.validateCommentState(editedComment, true);
+
+    cy.log('Deleting added comment');
+    IssueModal.deleteComment(editedComment);
+    IssueModal.confirmCommentDeletion();
+    IssueModal.validateCommentState(editedComment, false);
+
   });
 });
