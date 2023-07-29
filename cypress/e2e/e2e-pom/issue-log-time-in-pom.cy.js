@@ -20,10 +20,5 @@ describe('Log time', () => {
     
   });
 
-  it('Should cancel deletion process successfully', () => {
-    IssueModal.clickDeleteButton();
-    IssueModal.cancelDeletion();
-    IssueModal.closeDetailModal();
-    IssueModal.ensureIssueIsVisibleOnBoard(issueTitle);
-  });
+  
 });

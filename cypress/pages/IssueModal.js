@@ -50,7 +50,7 @@ class IssueModal {
   }
 
   editTitle(title) {
-    cy.get(this.title).debounced("type", title);
+    cy.get(this.title).type(title);
   }
 
   editDescription(description) {
