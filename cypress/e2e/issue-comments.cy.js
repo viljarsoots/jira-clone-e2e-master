@@ -68,7 +68,8 @@ describe("Issue comments creating, editing and deleting", () => {
       .find('[data-testid="issue-comment"]')
       .should("not.exist");
   });
-  it.only("Should Add Edit And Delete Comment on first Issue Successfully ", () => {
+  
+  it("Should Add Edit And Delete Comment on first Issue Successfully ", () => {
     const comment = 'This is a first comment'
     const editedComment = 'This is a edited Comment'
 
