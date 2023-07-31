@@ -27,6 +27,7 @@ class IssueModal {
     this.saveButton = "Save";
     this.deleteCommentButton = "Delete";
     this.confirmCommentDeletionButton = "Delete comment";
+    
   }
 
   getIssueModal() {
@@ -130,15 +131,15 @@ class IssueModal {
     cy.get(this.timeTrackingModal).should("be.visible");
   }
 
-  logTime(timeSpent) {
-    cy.get(this.timeSpentField).eq(1).clear().type(timeSpent);
+  logTime(issueDetails) {
+    cy.get(this.timeSpentField).eq(1).clear().type(issueDetails.timeSpent);
     cy.get(this.timeTrackingModal).within(() => {
       cy.contains(this.doneButtonName).click();
     });
   }
-  ensureTimeIsLogged(timeSpent) {
+  ensureTimeIsLogged(issueDetails) {
     cy.get(this.issueDetailModal).within(() => {
-      cy.contains(timeSpent + "h logged").should("be.visible");
+      cy.contains(issueDetails.timeSpent + "h logged").should("be.visible");
     });
   }
   validateIssueVisibilityState(issueTitle, isVisible) {
@@ -191,6 +192,26 @@ class IssueModal {
         .click();
     });
     cy.get(this.confirmationPopup).should("exist");
+  }
+  openIssue(issueDetails) {
+    cy.get(this.issuesList)
+      .first()
+      .should('contain', issueDetails.title)
+      .click();
+    cy.get(this.issueDetailModal).should('be.visible')
+  }
+  getEstimatedInputField() {
+    cy.contains('Original Estimate')
+    .next()
+    .children('input[placeholder="Number"]');
+  }
+
+  addEstimation(time){
+    cy.contains('Original Estimate')
+    .next()
+    .children('input[placeholder="Number"]')
+    .type(time)
+    .blur();
   }
 }
 
