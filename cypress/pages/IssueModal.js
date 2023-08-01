@@ -27,7 +27,6 @@ class IssueModal {
     this.saveButton = "Save";
     this.deleteCommentButton = "Delete";
     this.confirmCommentDeletionButton = "Delete comment";
-    
   }
 
   getIssueModal() {
@@ -196,38 +195,31 @@ class IssueModal {
   openIssue(issueDetails) {
     cy.get(this.issuesList)
       .first()
-      .should('contain', issueDetails.title)
+      .should("contain", issueDetails.title)
       .click();
-    cy.get(this.issueDetailModal).should('be.visible')
+    cy.get(this.issueDetailModal).should("be.visible");
   }
   getEstimatedInputField() {
-    cy.contains('Original Estimate')
-    .next()
-    .children('input[placeholder="Number"]');
+    cy.contains("Original Estimate")
+      .next()
+      .children('input[placeholder="Number"]');
   }
 
-  addEstimation(time){
-    if(
-      cy.get(this.timeSpentField)
-      .eq(0)
-      .should('have.attr', 'placeholder', 'Number')){
-      cy.get(this.timeSpentField)
-      .eq(0)
-      .type(time)
-      .blur();
-      }
-      else{
-        cy.get(this.timeSpentField)
-      .eq(0)
-      .clear()
-      .type(time)
-      .blur();
-      }
+  estimationChanging(time) {
+    if (time > 0) {
+      cy.get(this.timeSpentField).eq(0).clear().type(time).blur();
+    } else {
+      cy.get(this.timeSpentField).eq(0).clear().blur();
+    }
   }
 
   ensureEstimationIsLogged(timeEstimated) {
-    cy.get(this.timeSpentField).within(() => {
-      cy.contains(timeEstimated +'h estimated').should("be.visible");
+    cy.get(this.issueDetailModal).within(() => {
+      if (timeEstimated > 0) {
+        cy.contains(timeEstimated + "h estimated").should("be.visible");
+      } else {
+        cy.contains(timeEstimated + "h estimated").should("not.exist");
+      }
     });
   }
 }
