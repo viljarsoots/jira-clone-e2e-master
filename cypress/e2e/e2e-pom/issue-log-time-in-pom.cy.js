@@ -3,7 +3,7 @@ import IssueModal from "../../pages/IssueModal";
 
 
 const issueDetails = {
-  title: 'New Issue for Timelogging',
+  title: 'New Issue for Time logging',
   type: "Bug",
   description: "TEST_DESCRIPTION",
   assignee: "Lord Gaben",
@@ -32,9 +32,14 @@ describe('Log time', () => {
     cy.log('Time estimation is added');
     IssueModal.openIssue(issueDetails);
     IssueModal.addEstimation(issueDetails.timeEstimated);
+    IssueModal.closeDetailModal();
+    IssueModal.openIssue(issueDetails);
+    IssueModal.ensureEstimationIsLogged(issueDetails.timeEstimated);
     IssueModal.clickTimeTracking();
     IssueModal.logTime(issueDetails);
     IssueModal.ensureTimeIsLogged(issueDetails);
+    IssueModal.closeDetailModal();
+    IssueModal.openIssue(issueDetails);
     
     
     
@@ -42,3 +47,5 @@ describe('Log time', () => {
 
   
 });
+
+

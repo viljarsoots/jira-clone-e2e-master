@@ -207,11 +207,28 @@ class IssueModal {
   }
 
   addEstimation(time){
-    cy.contains('Original Estimate')
-    .next()
-    .children('input[placeholder="Number"]')
-    .type(time)
-    .blur();
+    if(
+      cy.get(this.timeSpentField)
+      .eq(0)
+      .should('have.attr', 'placeholder', 'Number')){
+      cy.get(this.timeSpentField)
+      .eq(0)
+      .type(time)
+      .blur();
+      }
+      else{
+        cy.get(this.timeSpentField)
+      .eq(0)
+      .clear()
+      .type(time)
+      .blur();
+      }
+  }
+
+  ensureEstimationIsLogged(timeEstimated) {
+    cy.get(this.timeSpentField).within(() => {
+      cy.contains(timeEstimated +'h estimated').should("be.visible");
+    });
   }
 }
 
