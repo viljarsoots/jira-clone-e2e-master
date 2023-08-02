@@ -18,8 +18,7 @@ const EXPECTED_AMOUNT_OF_ISSUES = '5';
 describe('Log time', () => {
   beforeEach(() => {
     cy.visit('/');
-    cy.url().should('eq', 'https://jira.ivorreic.com/project').then((url) => {
-    //open isse creation modal  
+    cy.url().should('eq', 'https://jira.ivorreic.com/project').then((url) => {  
     cy.visit(url + '/board?modal-issue-create=true');
     });
   });
