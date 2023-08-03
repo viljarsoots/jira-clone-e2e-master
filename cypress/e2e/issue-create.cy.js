@@ -142,4 +142,39 @@ describe("Issue create", () => {
       );
     });
   });
+
+  // Bonus Task 3
+
+  it.only('should remove unnecessary spaces on the board view', () => {
+    const title = ' Hello world ';
+    let trimmedTitle = title.trim();
+    createIssue(title);
+    checkTitle(trimmedTitle);
+
+
+  });
 });
+
+const issueModal = '[data-testid="modal:issue-create"]';
+const submitButton = 'button[type="submit"]';
+const issuesList = '[data-testid="list-issue"]';
+
+
+function createIssue(title) {
+  cy.get(issueModal).within(() => {
+    cy.get('[data-testid="select:type"]').click();
+    cy.get('[data-testid="select-option:Bug"]').trigger("click");
+    cy.get('input[name="title"]').trigger('mouseover').click().type(title);
+    cy.get(submitButton).click();
+  });
+
+}
+  function checkTitle(trimmedTitle) {
+    cy.get(issueModal).should("not.exist");
+    cy.reload();
+    cy.contains("Issue has been successfully created.").should("not.exist");
+    cy.get(issuesList)
+        .first()
+        .should('be.visible')
+        .and('contain', trimmedTitle);
+}

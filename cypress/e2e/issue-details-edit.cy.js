@@ -11,8 +11,8 @@ describe('Issue details editing', () => {
     getIssueDetailsModal().within(() => {
       cy.get('[data-testid="select:type"]').click('bottomRight');
       cy.get('[data-testid="select-option:Story"]')
-          .trigger('mouseover')
-          .trigger('click');
+        .trigger('mouseover')
+        .trigger('click');
       cy.get('[data-testid="select:type"]').should('contain', 'Story');
 
       cy.get('[data-testid="select:status"]').click('bottomRight');
@@ -62,4 +62,44 @@ describe('Issue details editing', () => {
   });
 
   const getIssueDetailsModal = () => cy.get('[data-testid="modal:issue-details"]');
+  const expectedLength = 5;
+  let arrayOfPriorities = [];
+
+  // Assignment 3: Task 1 (BONUS)
+
+  it('Should validate values and the array length and type out the Values.', () => {
+    const prioritySelector = '[data-testid="select:priority"]';
+    getIssueDetailsModal().within(() => {
+      cy.get(prioritySelector).then(($value) => {
+        cy.log('Selected option ' + $value.text().trim());
+        arrayOfPriorities.push($value.text().trim());
+      });
+      cy.get(prioritySelector).click()
+        .next()
+        .find('[data-testid*="select-option:"]')
+        .each(($option) => {
+          arrayOfPriorities.push($option.text().trim());
+          cy.log('Added option: ' + $option.text().trim(), 'Array length: ' + arrayOfPriorities.length);
+        }).then(() => {
+          cy.wrap(arrayOfPriorities).should('have.lengthOf', expectedLength);
+        });
+    });
+  });
+
+  // Assignment 3: Task 2 (BONUS)
+
+  it('Check if the reporter name has only characters in it', () => {
+    const pattern = /^[A-Za-z\s]*$/;
+
+    getIssueDetailsModal().within(() => {
+      cy.get('[data-testid="select:reporter"]')
+        .find('[data-testid*="avatar:"]')
+        .next()
+        .invoke('text').should('match', pattern)
+    });
+  });
+
+
 });
+
+

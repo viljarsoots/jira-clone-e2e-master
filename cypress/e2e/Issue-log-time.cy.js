@@ -81,7 +81,7 @@ describe('Log time', () => {
 
 
 });
-
+// Since in IssueModal the creation of issue is faulty I made new function. So everybody who runs it should sucseed.
 function createIssue(issueDetails) {
     cy.get(issueModal).within(() => {
         cy.get('[data-testid="select:type"]').click();
@@ -151,7 +151,7 @@ function ensureTimeIsLogged(timeSpent, timeRemaining) {
             cy.contains(timeSpent + "h logged").should("be.visible");
         } else {
             cy.contains(timeSpent + "h logged").should("not.exist");
-            checkNoTimeLogged(); //timeTracking().should('contain', 'No time logged');
+            checkNoTimeLogged();
         }
         if (timeRemaining > 0) {
             cy.contains(timeRemaining + "h remaining").should("be.visible");
@@ -187,7 +187,7 @@ function checkNoTimeLogged() {
     timeTracking().should('contain', 'No time logged');
 }
 
-function reOpenIssue(IssueDetails) {
+function reOpenIssue(issueDetails) {
     closeDetailModal();
     openIssue(issueDetails);
 
