@@ -81,9 +81,7 @@ class IssueModal {
           .first()
           .find("p")
           .contains(issueDetails.title);
-        cy.get(`[data-testid="avatar:${issueDetails.assignee}"]`).should(
-          "be.visible"
-        );
+        cy.get(`[data-testid="avatar:${issueDetails.assignee}"]`).should("be.visible");
       });
   }
 
